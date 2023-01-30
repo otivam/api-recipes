@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+  <title>otivam Recipes</title>
+  </head>
+  <body>
+<!-- Search Bar -->
+    <center>
+      <h2 style="padding-top: 3%;">
+          It's time for cooking! What do you have in the fridge? <br>
+          <small class="text-muted"> Let's warm up with a joke: {{ joke }} </small>
+      </h2>
+      <br><br>
+      <form action="/search/" method="post">
+          <div class="input-group mb-3" style="max-width: 50%;">
+              <input type="text" class="form-control" placeholder="Apple, flour, sugar" aria-label="Ingridients" aria-describedby="button-addon2" name="ingridients">
+              <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+              </div>          
+          </div>
+      </form>
+    </center>
+
+<!-- Recipes -->
+    <table>
+      {% for recipe in recipes %}
+        <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}">
+          <td><img class="thumbnail" src="{{ recipe['thumbnail_url'] }}" alt="Oops!"></td>
+          <td>
+            <а href=""><H2>{{ recipe['name'] }}</H2></а></br></br>
+            {% if recipe['description'] %}
+              <p>{{ recipe['description'] }}</p>
+            {% endif %}
+          </td>
+          <td>
+            <ul>
+              <li>Number of servings: {{ recipe['num_servings'] }}</li>
+              {% if recipe['total_time_minutes'] %}
+                <li>Prep time: {{ (recipe['total_time_minutes']/60)|round(2) }} hours</li>
+              {% endif %}
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+<!-- Navigation -->
+
+
+
+<!-- JavaScript -->
+    <script>
+      if("{{ pagination }}" == "True"){
+        $('.page_2, .page_3, .page_4').hide();
+
+        var recipes = $("tr[class^='recipe_']"),
+              num_of_recipes = recipes.length;
+
+        function pages_display_hide(){
+
+        }
+      }
+    </script>
+  </body>
+</html>
