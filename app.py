@@ -31,19 +31,21 @@ def search():
         else:
             all_recipes_sorted.insert(0,recipe)
 
-    for recipe in all_recipes_sorted:
+    for i, recipe in enumerate(all_recipes_sorted):
         recipe["page"] = cc_page
         cc -= 1
 
-        if cc == 0:
-            cc = 10
-            cc_page += 1
+        if i != len(all_recipes_sorted)-1:
+            if cc == 0:
+                cc = 10
+                cc_page += 1
 
 
     return render_template(
         "base.html",
         recipes = all_recipes_sorted,
-        pagination = "True"
+        pagination = "True",
+        cc_page = cc_page
     )
 
 if __name__ == "__main__":

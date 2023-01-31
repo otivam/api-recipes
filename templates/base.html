@@ -34,12 +34,13 @@
         <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}">
           <td><img class="thumbnail" src="{{ recipe['thumbnail_url'] }}" alt="Oops!"></td>
           <td>
-            <а href=""><H2>{{ recipe['name'] }}</H2></а></br></br>
+            <a href="#"><H2>{{ recipe['name'] }}</H2></a>
+            </br></br>
             {% if recipe['description'] %}
               <p>{{ recipe['description'] }}</p>
             {% endif %}
           </td>
-          <td>
+          <td class="recipe-details">
             <ul>
               <li>Number of servings: {{ recipe['num_servings'] }}</li>
               {% if recipe['total_time_minutes'] %}
@@ -51,20 +52,44 @@
       {% endfor %}
     </table>
 
-<!-- Navigation -->
-
+<!-- Pagination -->
+    <div class="center">
+      <div class="pagination-bar">
+        <span href="#" class="button_1 active">1</span>
+      </div>
+    </div>
 
 
 <!-- JavaScript -->
     <script>
       if("{{ pagination }}" == "True"){
-        $('.page_2, .page_3, .page_4').hide();
+        $(".button_1").show();
 
         var recipes = $("tr[class^='recipe_']"),
               num_of_recipes = recipes.length;
 
-        function pages_display_hide(){
+        function hide_display_active_page(active_page){
+          for(var x = 1; x <= "{{ cc_page }}"; x++){
+            if(x != active_page){
+              $(".page_"+x).hide();
+            }else{
+              $(".page_"+x).show();
+            }
+          }
+        }
 
+        for(var x = 2; x <= "{{ cc_page }}"; x++){
+          $(".pagination-bar").append("<span href='#' class='button_"+x+"'>"+x+"</span>")
+          $(".page_"+x).hide();
+        }
+
+        for(var x = 1; x <= "{{ cc_page }}"; x++){
+          $(".pagination-bar .button_"+x).on("click", function(){
+            window.parent.scrollTo(0,0);
+            $(".active").removeClass("active");
+            $(this).addClass("active");
+            hide_display_active_page($(".pagination-bar span").index($(this))+1);
+          })
         }
       }
     </script>

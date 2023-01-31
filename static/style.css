@@ -18,3 +18,39 @@ table {
   tr:nth-child(even) {
     background-color: #dddddd;
   }
+
+  .recipe-details {
+    width: 20%;
+  }
+
+  .center {
+    text-align: center;
+    margin-top: 5px;
+  }
+  
+  .pagination-bar {
+    display: inline-block;
+  }
+  
+  .pagination-bar span {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+    border: 1px solid #ddd;
+  }
+  
+  .pagination-bar span.active {
+    background-color: #e29e21;
+    color: white;
+    border: 1px solid #e29e21;
+  }
+
+  .pagination-bar span:hover:not(.active) {
+    background-color: #ddd;
+  }
+
+  .button_1 {
+    display:none;
+  }
