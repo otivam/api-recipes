@@ -28,28 +28,30 @@
       </form>
     </center>
 
+    <p>{{ test }}</p>
+
 <!-- Recipes -->
     <table>
-      {% for recipe in recipes %}
-        <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}">
-          <td><img class="thumbnail" src="{{ recipe['thumbnail_url'] }}" alt="Oops!"></td>
-          <td>
-            <a href="#"><H2>{{ recipe['name'] }}</H2></a>
-            </br></br>
-            {% if recipe['description'] %}
-              <p>{{ recipe['description'] }}</p>
-            {% endif %}
-          </td>
-          <td class="recipe-details">
-            <ul>
-              <li>Number of servings: {{ recipe['num_servings'] }}</li>
-              {% if recipe['total_time_minutes'] %}
-                <li>Prep time: {{ (recipe['total_time_minutes']/60)|round(2) }} hours</li>
+        {% for recipe in recipes %}
+          <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}">
+            <td><img class="thumbnail" src="{{ recipe['thumbnail_url'] }}" alt="Oops!"></td>
+            <td>
+              <a href="{{ recipe['id'] }}"><H2>{{ recipe['name'] }}</H2></a>
+              </br></br>
+              {% if recipe['description'] %}
+                <p>{{ recipe['description'] }}</p>
               {% endif %}
-            </ul>
-          </td>
-        </tr>
-      {% endfor %}
+            </td>
+            <td class="recipe-details">
+              <ul>
+                <li>Number of servings: {{ recipe['num_servings'] }}</li>
+                {% if recipe['total_time_minutes'] %}
+                  <li>Prep time: {{ (recipe['total_time_minutes']/60)|round(2) }} hours</li>
+                {% endif %}
+              </ul>
+            </td>
+          </tr>
+        {% endfor %} 
     </table>
 
 <!-- Pagination -->
