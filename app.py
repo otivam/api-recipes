@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__, static_url_path="/static")
 url = "https://tasty.p.rapidapi.com/recipes/list"
 headers = {
-	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
 }
 
