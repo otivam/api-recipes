@@ -8,6 +8,8 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 
+
+
 @app.route("/")
 def home_page():
     return render_template("base.html")
@@ -42,14 +44,14 @@ def search():
         else:
             all_recipes_sorted.insert(0,recipe)
 
-    for i, recipe in enumerate(all_recipes_sorted):
-        recipe["page"] = cc_page
-        cc -= 1
+        for i, recipe in enumerate(all_recipes_sorted):
+            recipe["page"] = cc_page
+            cc -= 1
 
-        if i != len(all_recipes_sorted)-1:
-            if cc == 0:
-                cc = 10
-                cc_page += 1
+            if i != len(all_recipes_sorted)-1:
+                if cc == 0:
+                    cc = 10
+                    cc_page += 1
 
     session['all_recipes_sorted'] = all_recipes_sorted
 
