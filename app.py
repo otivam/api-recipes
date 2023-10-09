@@ -20,7 +20,7 @@ def home_page():
 def search():
     url = "https://tasty.p.rapidapi.com/recipes/list"
     headers = {
-	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     data_ingridients = request.form["ingridients"]
@@ -68,7 +68,7 @@ def search():
 def recipe_details(recipe_id):
     url = "https://tasty.p.rapidapi.com/recipes/get-more-info"
     headers = {
-	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     querystring = {"id":str(recipe_id)}
@@ -90,7 +90,7 @@ def get_recipe_video():
     
     url = "https://tasty.p.rapidapi.com/recipes/get-more-info"
     headers = {
-	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     querystring = {"id":str(recipe_id)}
@@ -109,7 +109,7 @@ def topics(slug):
     pass
     url = "https://tasty.p.rapidapi.com/recipes/get-more-info"
     headers = {
-	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
+	"X-RapidAPI-Key": "",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     querystring = {"id":str(recipe_id)}
