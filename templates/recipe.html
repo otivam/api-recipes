@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>otivam Recipes</title>
+  </head>
+  <body>
+
+    
+    <!-- JUMBOTRON -->
+    <div class="container shadow rounded">
+      <div class="mt-5 pt-5 pb-5">
+        <div class="row">
+          <div class="col-md-2">
+            <img class="img-fluid rounded" src="{{ recipe['thumbnail_url'] }}" alt="Oops!">
+          </div>
+          <div class="col-md-10">
+            <h1>{{ recipe['name'] }}</h1>
+            {% if recipe['description'] %}
+              <p>{{ recipe['description'] }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+  
+      <div class="row mb-5 pb-5">
+        <div class="col-md-8">
+          <!-- INSTRUCTIONS -->
+          {% for instr in recipe['instructions'] %}
+          <div class="row">
+            <div class="card col-md-12">
+              <div class="card-header">Step {{ instr['position'] }}</div>
+              <div class="card-body text-secondary">
+                <p class="card-text">{{ instr['display_text'] }}</p>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- TOPICS -->
+          {% if recipe["topics"] %}
+            <div class="row topics">
+              <h4>Topics: </h4>
+              {% for t in recipe["topics"] %}
+                <a href="{{ url_for('topics', slug=t["slug"]) }}" target="_blank">{{ t['name'] }}</a>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+          <!-- INGREDIENTS -->
+          {% if recipe["sections"] %}
+            <div>
+              <h4>Ingredients</h4>
+                <td>
+                  <ul>
+                    {% for ingr in recipe["sections"][0]["components"] %}
+                      <li>{{ ingr["raw_text"] }}</li>
+                    {% endfor %}
+                  </ul>
+                </td>
+            </div>
+          {% endif %}
+
+          <!-- NUTRITIONS -->
+          {% if recipe["nutrition"] %}
+            <div>
+              <h4>Nutritions</h4>
+                <td>
+                  <ul>
+                    {% for key,value in recipe["nutrition"].items() %}
+                      {% if key != "updated_at" %}
+                        <li>{{ key }}: {{ value }}</li>
+                      {% endif %}  
+                    {% endfor %}
+                  </ul>
+                </td>
+            </div>
+          {% endif %}
+
+          <!-- RATING -->
+          <div class="row">
+            <h4>Rating</h4>
+            <div class="col-md-4 text-nowrap">
+              <i class="bi bi-hand-thumbs-up icon-green"></i><span> Positive: {{ recipe["user_ratings"]["count_positive"] }}</span>
+            </div>
+            <div class="col-md-4 text-nowrap">
+              <i class="bi bi-hand-thumbs-down icon-red"></i><span> Negative: {{ recipe["user_ratings"]["count_negative"] }}</span>
+            </div>
+          </div>
+
+          <!-- VIDEO -->
+          {% if recipe["original_video_url"] != "" %}
+            <video id="recipe_video" class="rounded mt-5" src="{{ recipe["original_video_url"] }}" style="width: 100%; height: 400px" allowfullscreen controls></video>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+    <script src="{{url_for('static', filename='master.js')}}"></script>
+  </body>
+</html>

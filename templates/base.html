@@ -1,69 +1,171 @@
 <!doctype html>
 <html lang="en">
   <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="/static/style.css" />
-  <title>otivam Recipes</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>otivam Recipes</title>
   </head>
+
   <body>
-<!-- Search Bar -->
-    <center>
-      <h2 style="padding-top: 3%;">
-          It's time for cooking! What do you have in the fridge? <br>
-          <small class="text-muted"> Let's warm up with a joke: {{ joke }} </small>
-      </h2>
-      <br><br>
-      <form action="/search/" method="post">
-          <div class="input-group mb-3" style="max-width: 50%;">
-              <input type="text" class="form-control" placeholder="Apple, flour, sugar" aria-label="Ingridients" aria-describedby="button-addon2" name="ingridients">
-              <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-              </div>          
+    <div class="container shadow rounded">
+      <!-- Search Bar -->
+      <center class="mt-5 pt-5 pb-5">
+        <h2>
+          HUNGRY? It's time for cooking! <br>
+          <small class="text-muted">What do you want to eat?</small>
+        </h2>
+        
+        <form action="/search/" method="post">
+            <div class="input-group mb-3" style="max-width: 50%;">
+                <input type="text" class="form-control" placeholder="Soup, salad, pasta" aria-label="Ingridients" aria-describedby="button-addon2" name="ingridients">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                </div>          
+            </div>
+        </form>
+      </center>
+
+      <!-- Recipes -->
+      <table>
+        {% for recipe in recipes %}
+
+          <!-- VIDOE MODAL -->
+          <div class="modal fade" id="video_modal_{{ recipe['id'] }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel"><i>{{ recipe['name'] }}</i> /</h1>
+                </div>
+                <div class="modal-body">
+                  {% if recipe["original_video_url"] != "" %}
+                    <video id="recipe_video" class="rounded mt-5" src="{{ recipe["original_video_url"] }}" style="width: 100%; height: 400px" allowfullscreen controls></video>
+                  {% endif %}
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
           </div>
-      </form>
-    </center>
 
-<!-- Recipes -->
-    <table>
-      {% for recipe in recipes %}
-        <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}">
-          <td><img class="thumbnail" src="{{ recipe['thumbnail_url'] }}" alt="Oops!"></td>
-          <td>
-            <a href="#"><H2>{{ recipe['name'] }}</H2></a>
-            </br></br>
-            {% if recipe['description'] %}
-              <p>{{ recipe['description'] }}</p>
-            {% endif %}
-          </td>
-          <td class="recipe-details">
-            <ul>
-              <li>Number of servings: {{ recipe['num_servings'] }}</li>
-              {% if recipe['total_time_minutes'] %}
-                <li>Prep time: {{ (recipe['total_time_minutes']/60)|round(2) }} hours</li>
+          <!-- INSTRUCTIONS MODAL -->
+          <div class="modal fade" id="instructions_modal_{{ recipe['id'] }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel"><i>{{ recipe['name'] }}</i> /</h1>
+                </div>
+                <div class="modal-body">
+                  <h4>Ingredients</h4>
+                  {% if recipe["sections"] %}
+                      <ul>
+                        {% for ingr in recipe["sections"][0]["components"] %}
+                          <li>{{ ingr["raw_text"] }}</li>
+                        {% endfor %}
+                      </ul>
+                  {% endif %}
+
+                  <h4>Instructions</h4>
+                  <ol>
+                    {% for instr in recipe['instructions'] %}
+                      <li>{{ instr['display_text'] }}</li>
+                    {% endfor %}
+                  </ol>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DETAILS MODAL -->
+          <div class="modal fade" id="details_modal_{{ recipe['id'] }}" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel"><i>{{ recipe['name'] }}</i> /</h1>
+                </div>
+                <div class="modal-body">
+
+                  {% if recipe["nutrition"] %}
+                    <div>
+                      <h4>Nutritions</h4>
+                        <ul>
+                          {% for key,value in recipe["nutrition"].items() %}
+                            {% if key != "updated_at" %}
+                              <li>{{ key }}: {{ value }}</li>
+                            {% endif %}  
+                          {% endfor %}
+                        </ul>
+                    </div>
+                  {% endif %}
+
+
+                  <div class="row">
+                    <h4>Rating</h4>
+                    <div class="col-md-4 text-nowrap">
+                      <i class="bi bi-hand-thumbs-up icon-green"></i><span> Positive: {{ recipe["user_ratings"]["count_positive"] }}</span>
+                    </div>
+                    <div class="col-md-4 text-nowrap">
+                      <i class="bi bi-hand-thumbs-down icon-red"></i><span> Negative: {{ recipe["user_ratings"]["count_negative"] }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <tr class="recipe_{{ recipe['id'] }} page_{{ recipe['page'] }}" id="{{ recipe['id'] }}">
+            <td>
+              <img class="thumbnail rounded" src="{{ recipe['thumbnail_url'] }}" alt="Oops!">
+            </td>
+            <td>
+              <a href="{{ url_for('recipe_details',recipe_id=recipe['id']) }}" target="_blank"><H2>{{ recipe['name'] }}</H2></a>
+              </br></br>
+              {% if recipe['description'] %}
+                <p>{{ recipe['description'] }}</p>
               {% endif %}
-            </ul>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
+            </td>
+            <td class="recipe-details">
+              <ul>
+                <li><i class="bi bi-egg icon-blue"></i> Number of servings: {{ recipe['num_servings'] }}</li>
+                {% if recipe['total_time_minutes'] %}
+                  <li><i class="bi bi-clock icon-blue"></i> Prep time: {{ (recipe['total_time_minutes']/60)|round(2) }} hours</li>
+                {% endif %}
+                {% if recipe['total_time_tier'] %}
+                  <li><i class="bi bi-hdd-stack icon-blue"></i> Group: {{ (recipe['total_time_tier']["display_tier"]) }} </li>
+                {% endif %}
+              </ul>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
 
-<!-- Pagination -->
-    <div class="center">
-      <div class="pagination-bar">
-        <span href="#" class="button_1 active">1</span>
+      <!-- Pagination -->
+      <div class="center mb-5 pb-5 pt-5" hidden>
+        <div class="pagination-bar">
+          <span href="#" class="button_1 active">1</span>
+        </div>
       </div>
     </div>
 
 
-<!-- JavaScript -->
+    <!-- JavaScript -->
     <script>
       if("{{ pagination }}" == "True"){
         $(".button_1").show();
+        $(".center").removeAttr("hidden");
 
         var recipes = $("tr[class^='recipe_']"),
               num_of_recipes = recipes.length;
@@ -93,5 +195,7 @@
         }
       }
     </script>
+
+    <script src="{{url_for('static', filename='master.js')}}"></script>
   </body>
 </html>
