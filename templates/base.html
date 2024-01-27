@@ -11,11 +11,145 @@
     <link rel="stylesheet" href="/static/style.css" />
     <title>otivam Recipes</title>
   </head>
-
   <body>
     <div class="container shadow rounded">
+      <nav aria-label="breadcrumb" class="register-login mt-5">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item logout">Logout</li>
+            <li class="breadcrumb-item register">Register</li>
+            <li class="breadcrumb-item login">Login</li>
+        </ol>
+      </nav>
+
+      {% if current_user.is_active %}
+        <input type="text" id="is-logged-in" name="is-logged-in" value="1" hidden>
+      {% else %}
+        <input type="text" id="is-logged-in" name="is-logged-in" value="0" hidden>
+      {% endif %}
+      
+        <!-- REGISTER -->
+        <div class="modal fade" id="register_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i>Register</i> /</h1>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="register-email">Email address</label>
+                  <input type="email" class="form-control" id="register-email" name="register-email" aria-describedby="emailHelp">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                  <p class="text-danger validation-register-email">Invalid email</p>
+                </div>
+
+                <div class="form-group">
+                  <label for="register-username">Username</label>
+                  <input type="text" class="form-control" id="register-username" name="register-username">
+                </div>
+                <p class="text-danger validation-register-username">This username is already taken</p>
+
+                <div class="form-group">
+                  <label for="register-pass">Password</label>
+                  <input type="password" class="form-control" id="register-pass" name="register-pass">
+                </div>
+                <p class="text-danger validation-register-pass-strength">Your password should contain one capital letter and one special symbol</p>
+                <p class="text-danger validation-register-pass-length">Your password should be at least 8 characters long</p>
+
+                <div class="form-group">
+                  <label for="register-repeat-pass">Repeat password</label>
+                  <input type="password" class="form-control" id="register-repeat-pass" name="register-repeat-pass">
+                </div>
+                <p class="text-danger validation-register-repeat-pass">Please repeat your password</p>
+
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary register-close" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-secondary register-submit">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LOGIN -->
+        <div class="modal fade" id="login_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel"><i>Login</i> /</h1>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <p class="text-danger validation-login">Wrong username or password! Please try again.</p>
+                  <label for="login-username">Username</label>
+                  <input type="text" class="form-control" id="login-username" name="login-username">
+                </div>
+
+                <div class="form-group">
+                  <label for="login-pass">Password</label>
+                  <input type="password" class="form-control" id="login-pass" name="login-pass">
+                </div>
+
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary login-close" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-secondary login-submit" hidden>Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+
+
+
+
+
+
+      <!-- SUCCESSFUL REGISTER -->
+      <div class="modal fade" id="successful_register_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h1>Successful registration !</h1>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary successful-registration-close" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESSFUL LOGIN -->
+      <div class="modal fade" id="successful_login_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h1>Welcome !</h1>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary welcome-close" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGOUT -->
+      <div class="modal fade" id="logout_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h1>Goodbye !</h1>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary welcome-close" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Search Bar -->
-      <center class="mt-5 pt-5 pb-5">
+      <center class="pt-5 pb-5">
         <h2>
           HUNGRY? It's time for cooking! <br>
           <small class="text-muted">What do you want to eat?</small>

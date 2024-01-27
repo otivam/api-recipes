@@ -73,12 +73,15 @@ table {
     color: rgb(19, 22, 206);
   }
 
-  /*
-  ul {
-    list-style:none;
-  }
-  */
-
   .topics {
     display: inline;
   }
+
+  .register-login li {
+    cursor: pointer;
+  }
+
+  .modal-footer {
+    justify-content: normal;
+  }
+
