@@ -5,7 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 
 
 app = Flask(__name__, static_url_path="/static")
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'##########'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
