@@ -8,7 +8,6 @@ app = Flask(__name__, static_url_path="/static")
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 login_manager = LoginManager()
-login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
@@ -132,89 +131,114 @@ def home_page():
 def search():
     url = "https://tasty.p.rapidapi.com/recipes/list"
     headers = {
-	"X-RapidAPI-Key": "",
+	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     data_ingridients = request.form["ingridients"]
     all_recipes_sorted = []
     querystring = {"from":"0","size":"100","q":data_ingridients}
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.get(url, headers=headers, params=querystring)
     all_recipes = response.json()["results"]
-    cc = 10
-    cc_page = 1
+    recipes_on_page = 5
+    num_of_pages = 1
+    pages = True
 
 
     for recipe in all_recipes:
-        with urllib.request.urlopen(recipe["original_video_url"]) as resp:
-            info = resp.info()
-            if info.get_content_type() == "binary/octet-stream":
-                recipe["original_video_url"] = ""
-
-
         if recipe["description"] == "" or recipe["description"] == None:
             all_recipes_sorted.append(recipe)
         else:
             all_recipes_sorted.insert(0,recipe)
 
-        for i, recipe in enumerate(all_recipes_sorted):
-            recipe["page"] = cc_page
-            cc -= 1
+    for i, recipe in enumerate(all_recipes_sorted):
+        recipe["page"] = num_of_pages
+        recipes_on_page -= 1
 
-            if i != len(all_recipes_sorted)-1:
-                if cc == 0:
-                    cc = 10
-                    cc_page += 1
+        if i != len(all_recipes_sorted)-1:
+            if recipes_on_page == 0:
+                recipes_on_page = 5
+                num_of_pages += 1
 
-    session['all_recipes_sorted'] = all_recipes_sorted
+    if len(all_recipes_sorted) == 0:
+        pages = False
+
+
 
     return render_template("base.html",
                             recipes = all_recipes_sorted,
-                            pagination = "True",
-                            cc_page = cc_page
+                            pagination = pages,
+                            cc_page = num_of_pages
                             )
 
 
 
 
-@app.route("/search/<recipe_id>")
+@app.route("/id/<recipe_id>")
 def recipe_details(recipe_id):
     url = "https://tasty.p.rapidapi.com/recipes/get-more-info"
     headers = {
-	"X-RapidAPI-Key": "",
+	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
     querystring = {"id":str(recipe_id)}
     response = requests.get(url, headers=headers, params=querystring)
     json_response = response.json()
-
-    with urllib.request.urlopen(json_response["original_video_url"]) as resp:
-        info = resp.info()
-        if info.get_content_type() == "binary/octet-stream":
-            json_response["original_video_url"] = ""
-            
+      
     return render_template('recipe.html', recipe=json_response)
 
 
 
-
-@app.route("/search/<slug>")
+@app.route("/slug/<slug>")
 def topics(slug):
-    pass
-    url = "https://tasty.p.rapidapi.com/recipes/get-more-info"
+    url = "https://tasty.p.rapidapi.com/recipes/list"
     headers = {
-	"X-RapidAPI-Key": "",
+	"X-RapidAPI-Key": "2ad60a66c2msh449e56015dac732p1a7c37jsn1403adeafdd5",
 	"X-RapidAPI-Host": "tasty.p.rapidapi.com"
     }
-    querystring = {"id":str(recipe_id)}
-    response = requests.get(url, headers=headers, params=querystring)
-    json_response = response.json()
 
-    with urllib.request.urlopen(json_response["original_video_url"]) as resp:
-        info = resp.info()
-        if info.get_content_type() == "binary/octet-stream":
-            json_response["original_video_url"] = ""
-            
-    return render_template('recipe.html', recipe=json_response)
+    slugs = slug.replace("-", " ")
+    querystring = {"from":"0","size":"100","tags":slugs}
+    response = requests.get(url, headers=headers, params=querystring)
+    all_recipes = response.json()["results"]
+    recipes_on_page = 5
+    num_of_pages = 1
+    pages = True
+    all_recipes_sorted = []
+
+
+    for recipe in all_recipes:
+        if recipe["description"] == "" or recipe["description"] == None:
+            all_recipes_sorted.append(recipe)
+        else:
+            all_recipes_sorted.insert(0,recipe)
+
+    for i, recipe in enumerate(all_recipes_sorted):
+        recipe["page"] = num_of_pages
+        recipes_on_page -= 1
+
+        if i != len(all_recipes_sorted)-1:
+            if recipes_on_page == 0:
+                recipes_on_page = 5
+                num_of_pages += 1
+
+    if len(all_recipes_sorted) == 0:
+        pages = False
+
+    
+
+    return render_template("base.html",
+                            recipes = all_recipes_sorted,
+                            pagination = pages,
+                            cc_page = num_of_pages
+                            )
+
+
+
+
+
+
+
+
 
     
 

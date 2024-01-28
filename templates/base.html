@@ -142,7 +142,21 @@
               <h1>Goodbye !</h1>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary welcome-close" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary goodbye-close" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTHING FOUND -->
+      <div class="modal fade" id="nothing_found_modal" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-body">
+              <h1>Nothing found ! Please try another search.</h1>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary nothing_found-close" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
         </div>
@@ -327,6 +341,11 @@
             hide_display_active_page($(".pagination-bar span").index($(this))+1);
           })
         }
+      }else if("{{ pagination }}" == "False"){
+        setTimeout(() => {
+          $("#nothing_found_modal").modal("show")
+        }, 100);
+        ;
       }
     </script>
 

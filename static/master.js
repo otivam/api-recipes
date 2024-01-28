@@ -1,21 +1,16 @@
 "use strict";
 
+if($("input[name='is-logged-in']").val() == "1"){
+    $(".breadcrumb .register, .breadcrumb .login").hide();
+    $(".breadcrumb .logout").show();
+    $(".breadcrumb .logout").addClass("breadcrumb-item");
+}else if($("input[name='is-logged-in']").val() == "0"){
+    $(".breadcrumb .register, .breadcrumb .login").show();
+    $(".breadcrumb .logout").hide();
+    $(".breadcrumb .logout").removeClass("breadcrumb-item");
+}
+
 $(window).on("load", function(){
-    if($("input[name='is-logged-in']").val() == "1"){
-        $(".breadcrumb .register, .breadcrumb .login").hide();
-        $(".breadcrumb .logout").show();
-        $(".breadcrumb .logout").addClass("breadcrumb-item");
-    }else if($("input[name='is-logged-in']").val() == "0"){
-        $(".breadcrumb .register, .breadcrumb .login").show();
-        $(".breadcrumb .logout").hide();
-        $(".breadcrumb .logout").removeClass("breadcrumb-item");
-    }
-
-
-
-
-
-
     //VIDEO MODAL FUNCTIONALITY
     $("tbody img").each(function(){
         var grandparent = $(this).parent().parent().attr("id");
@@ -236,8 +231,8 @@ $(window).on("load", function(){
         checkIfEmpty();
     })
 
-    //REGISTER/LOGIN - IF CLOSE IS CLICKED -> REDIRECT TO HOME PAGE
-    $(".successful-registration-close, .welcome-close").on("click", function(){
+    //REGISTER/LOGIN/LOGOUT - IF CLOSE IS CLICKED -> REDIRECT TO HOME PAGE
+    $(".successful-registration-close, .welcome-close, .goodbye-close").on("click", function(){
         document.location.href="/";
     })
 
